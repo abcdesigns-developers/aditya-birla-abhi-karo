@@ -1,6 +1,5 @@
-/* Fraunces optical size for the big numbers */
+/* Even-width digits for the big numbers */
 .study__row .font-display {
-  font-variation-settings: 'opsz' 144;
   font-variant-numeric: lining-nums tabular-nums;
 }
 

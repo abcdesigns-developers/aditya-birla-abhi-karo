@@ -30,7 +30,6 @@
 
 /* Big number on the back */
 .findings__stat {
-  font-variation-settings: 'opsz' 144;
   font-variant-numeric: lining-nums tabular-nums;
 }
 

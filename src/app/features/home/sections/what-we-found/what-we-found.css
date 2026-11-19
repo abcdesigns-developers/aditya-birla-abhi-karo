@@ -11,8 +11,6 @@
   white-space: nowrap;
   /* Full-height (lining) digits, all the same width so the counter doesn't jiggle */
   font-variant-numeric: lining-nums tabular-nums;
-  /* Fraunces "optical size": sharper, more editorial shapes at huge sizes */
-  font-variation-settings: 'opsz' 144, 'SOFT' 0;
   will-change: transform;
 }
 

@@ -30,8 +30,8 @@
   --color-purple: #7c2279; /* Innovative Purple - Dark */
 
   /* Type */
-  --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
-  --font-sans: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Anek Latin', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Anek Latin', ui-sans-serif, system-ui, sans-serif;
 
   /* Motion */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
