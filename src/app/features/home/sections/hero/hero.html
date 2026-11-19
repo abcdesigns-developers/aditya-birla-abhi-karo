@@ -1,0 +1,128 @@
+<section class="hero relative isolate overflow-hidden bg-white text-ink" aria-labelledby="hero-title">
+  <!-- Warm ivory "ground" the cubes stand on -->
+  <div class="hero__ground absolute inset-0 -z-10 bg-ivory" aria-hidden="true"></div>
+
+  <div
+    class="mx-auto flex min-h-[max(680px,100svh)] max-w-[1440px] flex-col gap-12 px-6 pt-10 pb-14 sm:px-8 lg:gap-6 lg:px-16 lg:pt-14 lg:pb-20"
+  >
+    <!-- Logo, title, tag -->
+    <div class="flex w-fit max-w-full flex-col">
+      <p class="hero__logo flex items-baseline font-black" data-anim="hero-text">
+        <span class="sr-only">Abhi Karo</span>
+        <span class="hero__logo-abhi bg-red text-white" aria-hidden="true"><span>ABHI</span></span>
+        <span class="hero__logo-karo text-orange italic" aria-hidden="true">karo</span>
+      </p>
+
+      <h1
+        id="hero-title"
+        class="mt-2 text-[clamp(1.5rem,7vw,5.25rem)] leading-[0.95] font-black tracking-[-0.02em] uppercase lg:mt-3"
+        data-anim="hero-text"
+      >
+        {{ title() }}
+      </h1>
+
+      <p
+        class="mt-3 self-end bg-red px-3 py-1 text-sm font-bold text-white sm:text-base lg:mt-4 lg:px-4 lg:text-2xl"
+        data-anim="hero-text"
+      >
+        {{ tag() }}
+      </p>
+    </div>
+
+    <!-- The cubes. One label for screen readers; the shapes are decoration. -->
+    <div class="flex justify-center lg:justify-start lg:pl-4">
+      <div
+        class="hero__stage"
+        data-anim="stage"
+        role="img"
+        aria-label="The word HEALTH spelled out on 3D cubes. Its A sits on a yellow box that also spells ACTION."
+      >
+        <svg class="pointer-events-none absolute inset-0 size-full overflow-visible" aria-hidden="true" data-anim="links">
+          <line class="hero__link" data-anim="link" />
+          <line class="hero__link" data-anim="link" />
+        </svg>
+
+        <span class="hero__shadow" data-anim="shadow" aria-hidden="true"></span>
+
+        <!-- HE and LTH come before the A box in the page, so the box is painted on top of them:
+             while they are small and tucked behind its walls, they look packed inside it. -->
+        <span class="hero__group hero__group--left" data-anim="group" aria-hidden="true">
+          @for (letter of left; track $index) {
+            <span class="hero__slot">
+              <ng-container [ngTemplateOutlet]="cube" [ngTemplateOutletContext]="{ $implicit: letter, anchor: $last ? 'e' : '' }" />
+            </span>
+          }
+        </span>
+
+        <span class="hero__group hero__group--right" data-anim="group" aria-hidden="true">
+          @for (letter of right; track $index) {
+            <span class="hero__slot">
+              <ng-container [ngTemplateOutlet]="cube" [ngTemplateOutletContext]="{ $implicit: letter, anchor: $first ? 'l' : '' }" />
+            </span>
+          }
+        </span>
+
+        <!-- The A box -->
+        <span class="hero__slot hero__slot--a" data-anim="a" aria-hidden="true">
+          <ng-container [ngTemplateOutlet]="cube" [ngTemplateOutletContext]="{ $implicit: 'A', anchor: 'a' }" />
+        </span>
+      </div>
+    </div>
+
+    <!-- Summary + date -->
+    <div class="mt-auto flex flex-col gap-4 lg:ml-auto lg:w-[min(560px,42%)]">
+      <p class="text-lg leading-snug font-semibold sm:text-xl lg:text-[1.375rem]" data-anim="summary">{{ summary() }}</p>
+      <span class="block h-px w-full origin-left bg-red" data-anim="summary-rule" aria-hidden="true"></span>
+      <p class="text-base font-medium text-ink-90 lg:text-lg" data-anim="summary">
+        <time [attr.datetime]="dateTime()">{{ date() }}</time>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- One cube: three visible faces. Tiny "anchor" dots sit on the corners the dotted lines attach to.
+     The A cube is a real box: inner walls, two lid flaps that open sideways like a carton,
+     and the CTION letters sitting in the same plane as its front face, so "A" + "CTION" read as one word. -->
+<ng-template #cube let-letter let-anchor="anchor">
+  <span class="cube" [class.cube--a]="anchor === 'a'" [attr.data-anim]="anchor === 'a' ? 'a-cube' : null">
+    @if (anchor === 'a') {
+      <span class="cube__face cube__inner cube__back"></span>
+      <span class="cube__face cube__inner cube__left"></span>
+      <span class="cube__face cube__inner cube__bottom"></span>
+      <!-- Each hinge is a zero-size point on a top edge; its flap swings around it -->
+      <span class="cube__hinge cube__hinge--left"><span class="cube__flap"></span></span>
+      <span class="cube__hinge cube__hinge--right"><span class="cube__flap"></span></span>
+      <span class="cube__word">
+        @for (char of word; track $index) {
+          <span data-anim="word-letter">{{ char }}</span>
+        }
+      </span>
+    } @else {
+      <!-- Top face: E and L's lines land on its surface, towards A -->
+      <span class="cube__face cube__top">
+        @if (anchor === 'e') {
+          <i class="cube__anchor top-[30%] left-[85%]" data-anchor="e"></i>
+        }
+        @if (anchor === 'l') {
+          <i class="cube__anchor top-1/2 left-[10%]" data-anchor="l"></i>
+        }
+      </span>
+    }
+    <span class="cube__face cube__front">
+      {{ letter }}
+      @if (anchor === 'a') {
+        <i class="cube__anchor bottom-0 left-0" data-anchor="a-left" data-corner="fl-b"></i>
+        <!-- Box outline corners: used to hide letters behind the walls while they climb out -->
+        <i class="cube__anchor top-0 left-0" data-corner="fl-t"></i>
+        <i class="cube__anchor top-0 right-0" data-corner="fr-t"></i>
+        <i class="cube__anchor right-0 bottom-0" data-corner="fr-b"></i>
+      }
+    </span>
+    <span class="cube__face cube__right">
+      @if (anchor === 'a') {
+        <i class="cube__anchor right-0 bottom-0" data-anchor="a-right" data-corner="br-b"></i>
+        <i class="cube__anchor top-0 right-0" data-corner="br-t"></i>
+      }
+    </span>
+  </span>
+</ng-template>

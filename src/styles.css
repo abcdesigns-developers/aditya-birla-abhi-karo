@@ -1,3 +1,77 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+/* =========================================================
+   DESIGN TOKENS — ABC colour palette
+   Every token becomes a Tailwind class automatically:
+   --color-red   ->  text-red, bg-red, border-red ...
+   --font-display ->  font-display
+   ========================================================= */
+@theme {
+  /* Base */
+  --color-white: #ffffff;
+  --color-ivory: #fff4d9; /* Warm Ivory */
+
+  /* Reds */
+  --color-red: #c7222a; /* Capital Red: use on white / ivory */
+  --color-red-deep: #8b151b; /* Support Red */
+  --color-red-glow: #e23a40; /* Capital Red tint: ONLY for red on dark backgrounds (passes AA) */
+
+  /* Blacks */
+  --color-ink: #231f20; /* 100% Black */
+  --color-ink-90: #414042; /* 90% Black */
+  --color-ink-65: #77787b; /* 65% Black: lines and decoration only, not small text */
+  --color-ink-15: #dcddde; /* 15% Black */
+
+  /* Supporting colours (charts, highlights, later sections) */
+  --color-yellow: #ffd65c; /* Warm Yellow */
+  --color-orange: #faa61a; /* Support Yellow */
+  --color-lime: #bdd753; /* Support Green */
+  --color-green: #70b865; /* Progressive Green */
+  --color-purple: #7c2279; /* Innovative Purple - Dark */
+
+  /* Type */
+  --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --font-sans: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* =========================================================
+   BASE (small human details)
+   ========================================================= */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+  }
+
+  /* Branded text selection */
+  ::selection {
+    background-color: var(--color-red);
+    color: var(--color-white);
+  }
+
+  /* Custom focus ring - only for keyboard users */
+  :focus-visible {
+    outline: 2px solid var(--color-red);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  /* Respect users who turn animations off */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

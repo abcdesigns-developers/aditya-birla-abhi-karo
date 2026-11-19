@@ -1,0 +1,131 @@
+<section class="bg-red-deep text-ivory" aria-labelledby="findings-title">
+  <div class="mx-auto flex max-w-[1440px] flex-col gap-12 px-6 py-18 sm:px-8 lg:gap-20 lg:px-16 lg:py-30">
+
+    <!-- Header -->
+    <div class="flex flex-col gap-5 lg:grid lg:grid-cols-12 lg:items-end lg:gap-x-6" data-anim="head">
+      <div class="flex flex-col gap-6 lg:col-span-7 lg:gap-8">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-semibold tracking-[0.15em] text-yellow tabular-nums" data-anim="head-text">{{ index() }}</span>
+          <span class="block h-px w-10 origin-left bg-yellow lg:w-14" data-anim="head-rule" aria-hidden="true"></span>
+          <span class="text-xs font-semibold tracking-[0.2em] text-ivory/85 uppercase" data-anim="head-text">{{ eyebrow() }}</span>
+        </div>
+        <h2
+          id="findings-title"
+          class="font-display text-[2.25rem] leading-[1.1] lg:text-[4rem] lg:leading-[1.02] lg:tracking-[-0.02em]"
+          data-anim="heading"
+        >
+          {{ heading() }}
+        </h2>
+      </div>
+      <p class="text-base leading-relaxed text-ivory/85 lg:col-span-4 lg:col-start-9" data-anim="head-text">
+        Each card is one finding. Select it to see the numbers behind it.
+      </p>
+    </div>
+
+    <!-- Cards -->
+    <ul class="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6" role="list">
+      @for (card of cards; track card.num) {
+        <li class="grid min-h-[360px]" [class]="card.css.item">
+          <app-flip-card [(flipped)]="card.flipped">
+
+            <!-- FRONT -->
+            <span
+              flipFront
+              class="findings__face flex flex-col gap-6 rounded-[4px] border border-ivory/25 bg-white/5 p-6 lg:p-9"
+              [class]="card.css.face"
+            >
+              <span class="flex flex-col justify-between gap-6" [class]="card.css.side">
+                <span class="flex items-start justify-between">
+                  <svg
+                    class="size-10 lg:size-13"
+                    data-anim="icon"
+                    viewBox="0 0 48 48"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    @switch (card.icon) {
+                      @case ('week') {
+                        <!-- A week, with three days missed -->
+                        <rect x="3" y="18" width="4" height="12" rx="1" />
+                        <rect x="9.5" y="18" width="4" height="12" rx="1" />
+                        <rect x="16" y="18" width="4" height="12" rx="1" class="findings__accent" />
+                        <rect x="22.5" y="18" width="4" height="12" rx="1" />
+                        <rect x="29" y="18" width="4" height="12" rx="1" class="findings__accent" />
+                        <rect x="35.5" y="18" width="4" height="12" rx="1" class="findings__accent" />
+                        <rect x="42" y="18" width="4" height="12" rx="1" />
+                      }
+                      @case ('stress') {
+                        <path d="M3 26h9l4-11 6 22 5-16 4 7h14" />
+                      }
+                      @case ('care') {
+                        <!-- Self, and others -->
+                        <circle cx="18" cy="24" r="11" />
+                        <circle cx="30" cy="24" r="11" stroke-dasharray="2 3" />
+                      }
+                      @case ('day') {
+                        <circle cx="24" cy="24" r="18" />
+                        <path d="M24 13v11l7 5" />
+                        <path d="M24 6a18 18 0 0 1 15.6 9" class="findings__accent-stroke" stroke-width="2" />
+                      }
+                      @case ('balance') {
+                        <path d="M24 8v32" />
+                        <path d="M16 42h16" />
+                        <path d="M8 20l32-6" />
+                        <path d="M8 20l-5 10h10z" />
+                        <path d="M40 14l-5 10h10z" />
+                      }
+                    }
+                  </svg>
+                  <span class="font-display text-[1.75rem] leading-none font-light text-yellow" data-anim="card-num">{{ card.num }}</span>
+                </span>
+
+                <span class="findings__hint" [class]="card.css.sideHint">See the evidence</span>
+              </span>
+
+              <span class="flex flex-1 flex-col justify-end gap-6">
+                <span class="block font-display text-[1.625rem] leading-[1.15] tracking-[-0.01em] lg:text-[2.125rem]" data-anim="card-title">
+                  {{ card.title }}
+                </span>
+                <span class="findings__hint" [class]="card.css.mainHint">See the evidence</span>
+              </span>
+            </span>
+
+            <!-- BACK -->
+            <span
+              flipBack
+              class="flex flex-col gap-6 rounded-[4px] bg-ivory p-6 text-ink lg:p-9"
+              [class]="card.css.face"
+            >
+              <span class="flex flex-col justify-between gap-4" [class]="card.css.side">
+                <span class="text-xs font-semibold tracking-[0.16em] text-ink-90 uppercase">{{ card.num }} · The evidence</span>
+                <span class="flex flex-col gap-2">
+                  <span
+                    class="findings__stat block font-display text-[4rem] leading-[0.9] font-light tracking-[-0.035em] whitespace-nowrap text-red lg:text-[5.5rem]"
+                    [appCountUp]="card.stat"
+                    [countWhen]="card.flipped()"
+                  ></span>
+                  <span class="block max-w-[32ch] text-[13px] leading-[1.45] text-ink-90">{{ card.statLabel }}</span>
+                </span>
+              </span>
+
+              <span class="block text-sm leading-[1.6] text-ink-90 lg:text-[15px]" [class]="card.css.main">
+                @for (part of card.parts; track $index) {
+                  @if (part.bold) {
+                    <strong class="font-semibold text-ink">{{ part.text }}</strong>
+                  } @else {
+                    <!-- ng-container stops Angular adding a space before "." -->
+                    <ng-container>{{ part.text }}</ng-container>
+                  }
+                }
+              </span>
+            </span>
+          </app-flip-card>
+        </li>
+      }
+    </ul>
+  </div>
+</section>

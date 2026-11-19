@@ -1,0 +1,76 @@
+/* Fraunces optical size for the big numbers */
+.study__row .font-display {
+  font-variation-settings: 'opsz' 144;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* SplitText masks each line; give descenders (g, y, p) room so they aren't cut */
+[data-anim='sentence'] :where(div) {
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* ---------- Hover (only on devices with a real pointer) ----------
+   One calm gesture: a soft yellow highlight wipes in behind the row
+   and the key details (icon + number) pick up the brand red.
+   Nothing moves or resizes, so the layout stays perfectly still. */
+
+.study__wash {
+  /* Pulled out past the row edges so the text isn't flush against it */
+  inset: 0 -1.25rem;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--color-yellow) 55%, transparent);
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  /* Leaving: fade out, then quietly reset the wipe for next time */
+  transition:
+    opacity 0.35s ease,
+    clip-path 0s linear 0.35s;
+}
+
+.study__icon,
+.study__num,
+.study__unit,
+.study__desc {
+  transition: color 0.35s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .study__row:hover .study__wash {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transition:
+      opacity 0.2s ease,
+      clip-path 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .study__row:hover .study__icon,
+  .study__row:hover .study__num {
+    color: var(--color-red);
+  }
+  .study__row:hover .study__unit,
+  .study__row:hover .study__desc {
+    color: var(--color-ink);
+  }
+  /* "What" icon: the broken line slowly starts moving */
+  .study__row:hover .study__dash {
+    animation: study-march 1.2s linear infinite;
+  }
+}
+
+@keyframes study-march {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No wipe: the highlight simply appears */
+  .study__wash,
+  .study__row:hover .study__wash {
+    clip-path: none;
+    transition-duration: 0.01ms;
+  }
+  .study__row:hover .study__dash {
+    animation: none;
+  }
+}

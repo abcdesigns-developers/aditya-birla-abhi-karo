@@ -1,0 +1,73 @@
+/* Grid all the way down, so the card is as tall as its tallest face
+   and min-height set on <app-flip-card> is respected. */
+:host {
+  display: grid;
+}
+
+.flip {
+  all: unset;
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 4px;
+  perspective: 1600px;
+  transition: translate 0.4s var(--ease-out-expo);
+}
+
+.flip:hover {
+  translate: 0 -4px;
+}
+
+.flip:focus-visible {
+  outline: 2px solid var(--color-yellow);
+  outline-offset: 4px;
+}
+
+.flip__inner {
+  display: grid;
+  transform-style: preserve-3d;
+  transition: transform 0.8s var(--ease-out-expo);
+}
+
+.is-flipped .flip__inner {
+  transform: rotateY(180deg);
+}
+
+/* Both faces sit in the same grid cell, one on top of the other */
+.flip__face {
+  grid-area: 1 / 1;
+  display: grid;
+  border-radius: 4px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.flip__face--back {
+  transform: rotateY(180deg);
+}
+
+/* Reduced motion: no 3D turn, just a soft cross-fade */
+@media (prefers-reduced-motion: reduce) {
+  .flip,
+  .flip__inner {
+    transition: none;
+  }
+  .flip:hover {
+    translate: none;
+  }
+  .is-flipped .flip__inner,
+  .flip__face--back {
+    transform: none;
+  }
+  .flip__face {
+    transition: opacity 0.3s ease;
+  }
+  .flip__face--back,
+  .is-flipped .flip__face--front {
+    opacity: 0;
+  }
+  .is-flipped .flip__face--back {
+    opacity: 1;
+  }
+}

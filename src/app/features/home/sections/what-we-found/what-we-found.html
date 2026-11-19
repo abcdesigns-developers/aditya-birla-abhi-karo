@@ -1,0 +1,58 @@
+<section class="wwf relative isolate overflow-hidden bg-red-deep text-ivory" aria-labelledby="wwf-title">
+  <div
+    class="relative mx-auto flex max-w-[1440px] flex-col px-6 pt-18 sm:px-8 lg:min-h-[max(720px,100svh)] lg:px-16 lg:pt-22 lg:pb-18"
+  >
+    <!-- Left column: label, caption, quote, source -->
+    <div class="relative z-10 flex flex-col gap-9 lg:max-w-[400px] lg:flex-1 lg:justify-between lg:gap-12">
+      <div class="flex flex-col gap-9 lg:gap-12">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-semibold tracking-[0.15em] text-yellow tabular-nums" data-anim="line">
+            {{ index() }}
+          </span>
+          <span class="block h-px w-10 origin-left bg-yellow lg:w-14" data-anim="rule" aria-hidden="true"></span>
+          <h2 id="wwf-title" class="text-xs font-semibold tracking-[0.2em] text-ivory/85 uppercase" data-anim="line">
+            {{ eyebrow() }}
+          </h2>
+        </div>
+
+        <div class="flex flex-col gap-3 lg:gap-4">
+          <p class="font-display text-[2rem] leading-[1.1] lg:text-[2.75rem] lg:leading-[1.08] lg:tracking-[-0.01em]" data-anim="line">
+            {{ title() }}
+          </p>
+          <p class="max-w-[30ch] text-base leading-relaxed text-ivory/85 lg:text-[1.0625rem]" data-anim="line">
+            {{ description() }}
+          </p>
+        </div>
+
+        <p
+          class="border-t border-ivory/25 pt-4 font-display text-lg leading-[1.45] text-ivory/85 italic lg:pt-5 lg:text-xl"
+          data-anim="line"
+        >
+          {{ quote() }}
+        </p>
+      </div>
+
+      <p class="text-xs text-ivory/85" data-anim="line">{{ source() }}</p>
+    </div>
+
+    <!-- Small label top-right (desktop only, decorative: the same fact is in the text) -->
+    <div
+      class="absolute top-22 right-16 hidden items-center gap-3 text-xs tracking-[0.18em] text-ivory/85 uppercase lg:flex"
+      aria-hidden="true"
+      data-anim="tag"
+    >
+      <span>Goals missed</span>
+      <span class="block h-px w-30 bg-ivory/40"></span>
+      <span class="text-yellow">{{ missedLabel() }}</span>
+    </div>
+
+    <!-- The big number. Screen readers hear the final value once. -->
+    <p class="wwf__number font-display font-light text-yellow" data-anim="number">
+      <span class="sr-only">{{ value() }} percent</span>
+      <span aria-hidden="true" class="tabular-nums">{{ display() }}</span><span
+        aria-hidden="true"
+        class="ml-[0.02em] inline-block align-top text-[0.4em] leading-none tracking-normal"
+      >%</span>
+    </p>
+  </div>
+</section>

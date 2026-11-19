@@ -1,0 +1,48 @@
+/* "Turn over" hint on the front of each card */
+.findings__hint {
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-ivory) 85%, transparent);
+}
+
+.findings__hint::before {
+  /* small "turn" arrow, drawn with CSS so it needs no extra markup */
+  content: '';
+  width: 1rem;
+  height: 1rem;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4 12a8 8 0 1 1 2.3 5.7'/%3E%3Cpath d='M4 18v-6h6'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+
+/* Red details inside the line icons */
+.findings__accent {
+  fill: var(--color-yellow);
+  stroke: var(--color-yellow);
+}
+.findings__accent-stroke {
+  stroke: var(--color-yellow);
+}
+
+/* Big number on the back */
+.findings__stat {
+  font-variation-settings: 'opsz' 144;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Front border brightens on hover */
+app-flip-card:hover .findings__face {
+  border-color: color-mix(in srgb, var(--color-ivory) 55%, transparent);
+}
+.findings__face {
+  transition: border-color 0.3s ease;
+}
+/* SplitText masks each heading line; give descenders (g, y) room so they aren't cut */
+[data-anim='heading'] :where(div) {
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}

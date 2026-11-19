@@ -1,0 +1,17 @@
+<button
+  type="button"
+  class="flip"
+  [class.is-flipped]="flipped()"
+  [attr.aria-pressed]="flipped()"
+  (click)="toggle()"
+>
+  <span class="flip__inner">
+    <!-- The hidden face is removed from screen readers and keyboard (inert) -->
+    <span class="flip__face flip__face--front" [attr.aria-hidden]="flipped()" [inert]="flipped()">
+      <ng-content select="[flipFront]" />
+    </span>
+    <span class="flip__face flip__face--back" [attr.aria-hidden]="!flipped()" [inert]="!flipped()">
+      <ng-content select="[flipBack]" />
+    </span>
+  </span>
+</button>

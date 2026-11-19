@@ -1,0 +1,246 @@
+/* ---------- Background: ivory "ground" with a diagonal edge, as in the report cover ---------- */
+.hero__ground {
+  clip-path: polygon(0 38%, 45% 42%, 100% 66%, 100% 100%, 0 100%);
+}
+@media (min-width: 1024px) {
+  .hero__ground {
+    clip-path: polygon(0 47%, 42% 51%, 100% 78%, 100% 100%, 0 100%);
+  }
+}
+
+/* ---------- Logo (a logotype, so it is exempt from text-contrast rules) ---------- */
+.hero__logo {
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.hero__logo-abhi {
+  display: inline-block;
+  padding: 0.06em 0.22em 0.02em;
+  transform: skewX(-10deg);
+  border-radius: 0.08em;
+}
+.hero__logo-abhi > span {
+  display: inline-block;
+  transform: skewX(10deg);
+}
+.hero__logo-karo {
+  margin-left: 0.06em;
+}
+
+/* ---------- Cube stage ----------
+   Everything is measured in --s (one cube edge), so the whole scene scales together.
+   Layout, in cubes:  [H E] 2.9  |  gap 1.6  |  [L T H] 4.35   → 8.85 wide
+   A sits centred above the gap.                                                   */
+.hero__stage {
+  --s: clamp(32px, 8.6vw, 100px);
+  --slot-w: calc(var(--s) * 1.45);
+  --slot-h: calc(var(--s) * 1.4);
+  --row-top: calc(var(--s) * 1.95);
+  position: relative;
+  width: calc(var(--s) * 8.85);
+  height: calc(var(--s) * 3.8);
+}
+
+.hero__group {
+  /* Letters sit in front of the A box; while inside it, a clip hides them behind its walls */
+  z-index: 2;
+  position: absolute;
+  top: var(--row-top);
+  display: flex;
+  will-change: transform;
+}
+.hero__group--left {
+  left: 0;
+}
+.hero__group--right {
+  right: 0;
+}
+
+.hero__slot {
+  display: grid;
+  width: var(--slot-w);
+  height: var(--slot-h);
+  place-items: center;
+}
+.hero__slot--a {
+  position: absolute;
+  top: calc(var(--s) * 0.1);
+  /* centre of the gap (3.7 cubes) minus half a slot */
+  left: calc(var(--s) * 3.7 - var(--slot-w) / 2);
+}
+[data-anim='a'] {
+  will-change: transform;
+}
+
+/* A's soft shadow on the ground, under the gap */
+.hero__shadow {
+  position: absolute;
+  top: calc(var(--row-top) + var(--slot-h) + var(--s) * 0.15);
+  left: calc(var(--s) * 3.7 - var(--s) * 0.7);
+  width: calc(var(--s) * 1.4);
+  height: calc(var(--s) * 0.24);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(35 31 32 / 0.55), rgb(35 31 32 / 0.18) 60%, transparent);
+  filter: blur(2px);
+}
+
+/* Dotted connecting lines */
+.hero__link {
+  stroke: var(--color-ink);
+  stroke-opacity: 0.6;
+  stroke-width: 1.25;
+  stroke-dasharray: 1.5 3.5;
+  stroke-linecap: round;
+}
+
+/* ---------- One 3D cube ----------
+   No perspective on purpose: a flat (isometric-style) projection, like the report cover.
+   Visible faces: top (brightest), front with the letter, right side (darkest).
+   Colours and angles are CSS variables so the A box can be animated (red → yellow, turning). */
+.cube {
+  --half: calc(var(--s) / 2);
+  --c-top: #ea2f3e;
+  --c-front: #c8202c;
+  --c-right: #7d1218;
+  --c-inner: #4a0a0e;
+  --c-letter: #ffffff;
+  --rx: -26deg;
+  --ry: -38deg;
+  --flap: 0deg;
+  position: relative;
+  display: block;
+  width: var(--s);
+  height: var(--s);
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+}
+
+/* The A box, in its final state (what people with reduced motion see):
+   Warm Yellow, turned almost face-on so "A" + "CTION" read as one word. */
+.cube--a {
+  --c-top: #ffe592;
+  --c-front: #ffd65c;
+  --c-right: #d9a12b;
+  --c-inner: #9c6a0c;
+  --c-letter: var(--color-red-deep);
+  --rx: -10deg;
+  --ry: -14deg;
+}
+
+.cube__face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  /* thin highlight along the edges, so faces read as separate planes */
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07);
+}
+
+.cube__top {
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.1), rgb(0 0 0 / 0.06)), var(--c-top);
+  transform: rotateX(90deg) translateZ(var(--half));
+}
+
+.cube__front {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, rgb(255 255 255 / 0.05), rgb(0 0 0 / 0.12)), var(--c-front);
+  transform: translateZ(var(--half));
+  color: var(--c-letter);
+  font-size: calc(var(--s) * 0.62);
+  font-weight: 900;
+  line-height: 1;
+}
+.cube:not(.cube--a) .cube__front {
+  text-shadow: 0 0.03em 0 rgb(0 0 0 / 0.18);
+}
+
+.cube__right {
+  background: linear-gradient(200deg, rgb(255 255 255 / 0.04), rgb(0 0 0 / 0.16)), var(--c-right);
+  transform: rotateY(90deg) translateZ(var(--half));
+}
+
+/* ---- A box only: two lid flaps and inner walls ---- */
+
+/* Hinges sit on the left and right top edges of the box. --flap: 0deg = closed (together they
+   cover the top exactly like a normal top face); bigger angles swing both flaps up and outwards,
+   leaving the middle clear for the letters to climb out. */
+.cube__hinge {
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+.cube__hinge--left {
+  left: 0;
+  transform: rotateZ(calc(var(--flap) * -1));
+}
+.cube__hinge--right {
+  left: 100%;
+  transform: rotateZ(var(--flap));
+}
+
+/* Each flap is half the top face, laid flat (rotateX) and centred front-to-back (translateZ) */
+.cube__flap {
+  position: absolute;
+  top: 0;
+  width: var(--half);
+  height: var(--s);
+  transform-origin: 50% 0;
+  transform: translateZ(calc(var(--half) * -1)) rotateX(90deg);
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.1), rgb(0 0 0 / 0.06)), var(--c-top);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07);
+}
+.cube__hinge--left .cube__flap {
+  left: 0;
+}
+.cube__hinge--right .cube__flap {
+  right: 0;
+}
+
+/* Inside of the box, seen through the opening. Hidden behind the outer faces when closed. */
+.cube__inner {
+  background: linear-gradient(180deg, rgb(0 0 0 / 0.25), rgb(0 0 0 / 0)), var(--c-inner);
+  backface-visibility: visible;
+  box-shadow: none;
+}
+.cube__back {
+  transform: translateZ(calc(var(--half) * -1));
+}
+.cube__left {
+  transform: rotateY(-90deg) translateZ(var(--half));
+}
+.cube__bottom {
+  transform: rotateX(-90deg) translateZ(var(--half));
+}
+
+/* "CTION": in the same plane as the A face (translateZ), just past the box's right side,
+   so it turns with the box and lines up with the A. */
+.cube__word {
+  position: absolute;
+  top: 0;
+  left: calc(100% + var(--s) * 0.3);
+  display: flex;
+  height: 100%;
+  align-items: center;
+  gap: 0.03em;
+  transform: translateZ(var(--half));
+  transform-style: preserve-3d;
+  color: var(--color-red-deep);
+  font-size: calc(var(--s) * 0.62);
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+.cube__word > span {
+  display: inline-block;
+  transform-origin: 0 50%;
+}
+
+/* Zero-size points on cube corners; the dotted lines are drawn between them */
+.cube__anchor {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
